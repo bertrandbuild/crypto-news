@@ -2,6 +2,7 @@ import {ethers} from "hardhat";
 
 async function main() {
   const oracleAddress: string = await deployOracle();
+  await deployGpt(oracleAddress);
 }
 
 async function deployOracle(): Promise<string> {
@@ -14,6 +15,16 @@ async function deployOracle(): Promise<string> {
   );
 
   return oracle.target as string;
+}
+
+async function deployGpt(oracleAddress: string) {
+  const agent = await ethers.deployContract("Gpt", [oracleAddress], {});
+
+  await agent.waitForDeployment();
+
+  console.log(
+    `GPT deployed to ${agent.target}`
+  );
 }
 
 // We recommend this pattern to be able to use async/await everywhere
