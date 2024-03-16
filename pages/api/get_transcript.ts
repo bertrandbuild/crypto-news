@@ -1,8 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getYtTranscript } from '../../utils/callApi'; // Update the path as needed
-import { postToIPFS } from 'utils/ipfs';
 import * as testTranscript from './data.json';
+
+function cleanupTranscript(jsonString) {
+  const transcript = jsonString.transcript;
+  // Use a regular expression to remove the "Time: [timestamp] - Text: " part from each line
+  const cleanedTranscript = transcript.replace(/Time: \d+\.\d+ - Text: /g, '').replace(/\n/g, ' ');
+  return cleanedTranscript;
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,18 +20,11 @@ export default async function handler(
       return res.status(400).json({ error: 'Video ID is required' });
     }
 
+    const isDev = process.env.NODE_ENV === 'development';
     try {
-      const isDev = true;
       const transcript = (isDev) ? testTranscript : await getYtTranscript(videoId);
-      // store on ipfs original transcript
-      const uri = await postToIPFS(
-        JSON.stringify({ transcript }),
-      );
-      console.log(uri);
-      // TODO: query galadriel for a summary
-      // TODO: store on ipfs summary
-      // TODO: store onchain the map
-      res.status(200).json({ uri });
+      const cleanedTranscript = cleanupTranscript(transcript);
+      res.status(200).json(cleanedTranscript);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
