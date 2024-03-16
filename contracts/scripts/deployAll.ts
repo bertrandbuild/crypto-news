@@ -2,7 +2,7 @@ import {ethers} from "hardhat";
 
 async function main() {
   const oracleAddress: string = await deployOracle();
-  await deployGpt(oracleAddress);
+  await deployGpt(process.env.ORACLE_ADDRESS as string);
 }
 
 async function deployOracle(): Promise<string> {
