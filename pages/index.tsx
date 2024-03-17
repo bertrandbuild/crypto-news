@@ -17,9 +17,21 @@ import { FallInPlace } from "components/motion/fall-in-place";
 import { extractVideoId, getSummarizedTranscript, getTranscript } from "utils/utils";
 import { useState } from "react";
 import { Loading } from "@saas-ui/react";
-import { fontSizes } from "theme/foundations/typography";
 import { getFileUrl, uploadText } from "utils/filecoin";
 import Link from "next/link";
+import Lottie from 'react-lottie';
+import sky from '../theme/lottie/sky-bg.json';
+import happyNouns from '../theme/lottie/Happy_Nouns.json';
+import sadNouns from '../theme/lottie/Sad_Nouns.json';
+import loading from '../theme/lottie/Loading.json';
+import Scanning_Glasses from '../theme/lottie/Scanning_Glasses.json';
+const lottieDefaultOptions = {
+  loop: true,
+  autoplay: true,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+};
 
 const aiInsights = {
   "Market_News": [
@@ -40,7 +52,7 @@ const aiInsights = {
 
 const Home: NextPage = () => {
   const [content, setContent] = useState();
-  const [isLoading, setIsLoading] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState();
 
   const context = {
@@ -56,14 +68,13 @@ const Home: NextPage = () => {
     <Box className="flex flex-col min-h-screen">
       {/* @ts-ignore */}
       {isLoaded ? <VideoContent context={context} /> : <HeroSection context={context} />}
-      {isLoading ? <Loading /> : null}
     </Box>
   );
 };
 
 {/* @ts-ignore */}
 const HeroSection: React.FC = ({ context }) => {
-  const { setContent, setIsLoading, setIsLoaded } = context;
+  const { setContent, setIsLoading, setIsLoaded, isLoading } = context;
   const handleSubmit = async (videoUrl) => {
     setIsLoading(true);
     const videoId = extractVideoId(videoUrl);
@@ -71,7 +82,12 @@ const HeroSection: React.FC = ({ context }) => {
       try {
         const isDev = false;
         if (isDev){
-          setContent(aiInsights);
+          setIsLoading(true)
+          window.setTimeout(() => {
+            setContent(aiInsights);
+            setIsLoading(false);
+            setIsLoaded(true);
+          },4000)
         } else {
           const transcript = await getTranscript(videoId);
           const aiInsights = await getSummarizedTranscript(transcript)
@@ -84,17 +100,11 @@ const HeroSection: React.FC = ({ context }) => {
               transcriptFileUrl: getFileUrl(transcriptCid?.data.Hash)
             }
             setContent(content);
+            setIsLoading(false);
+            setIsLoaded(true);
           }, 100)
         }
 
-        setContent(aiInsights);
-        // TODO
-        // const tx = saveToContract(videoId, transcriptCid, insightCid)
-        // console.log(tx);
-        window.setTimeout(() => {
-          setIsLoading(false);
-          setIsLoaded(true);
-        }, 100);
       } catch (error) {
         console.error(error);
         setIsLoading(false);
@@ -109,6 +119,13 @@ const HeroSection: React.FC = ({ context }) => {
       backgroundImage={`url("static/images/SKY_BG_2.png")`}
       backgroundSize="cover"
     >
+      <Lottie 
+        options={{ ...lottieDefaultOptions, animationData: sky }}
+        height={'100vh'}
+        width={'100vw'}
+        zIndex={-1}
+        style={{position: 'absolute', top: 0, left: 0, zIndex: -1}}
+        />
       <Container maxW="container.xl" pt={{ base: 10, lg: 20 }} pb="40">
         <Stack direction={{ base: "column", lg: "column" }} alignItems="center">
           <Hero
@@ -116,7 +133,7 @@ const HeroSection: React.FC = ({ context }) => {
             justifyContent="center"
             alignItems="center"
             px="0"
-            title={<FallInPlace>Noun Watch, Look for insights</FallInPlace>}
+            title={isLoading?(<FallInPlace>Relax, we are watching this video for you</FallInPlace>):(<FallInPlace>Noun Watch, Look for insights</FallInPlace>)}
             description={
               <FallInPlace delay={0.4} fontWeight="medium">
                 Turn you fav crypto influencers videos into on-chain provable
@@ -141,13 +158,24 @@ const HeroSection: React.FC = ({ context }) => {
                     type="text"
                     name="videoUrl"
                     placeholder='Paste a youtube url'
+                    disabled={isLoading}
                     // value={"https://www.youtube.com/watch?v=8FHWcNOZ95E"}
                   />
-                  <img
-                    style={{ position: "absolute", right: "20px", top: "22px", transform: "rotateY(175deg)" }}
-                    src="\static\images\SEARCH_NOUNS_GLASSES.svg"
-                    alt="Icon"
-                  />
+                  {isLoading ? (
+                    <Lottie 
+                      options={{ ...lottieDefaultOptions, animationData: Scanning_Glasses }}
+                      height={'30px'}
+                      width={'90px'}
+                      zIndex={0}
+                      style={{position: 'absolute', top: '22px', right: '20px', transform: 'rotateY(175deg)'}}
+                    />
+                  ):(
+                    <img
+                      style={{ position: "absolute", right: "20px", top: "22px", transform: "rotateY(175deg)" }}
+                      src="\static\images\SEARCH_NOUNS_GLASSES.svg"
+                      alt="Icon"
+                    />
+                  )}
                 </FormControl>
               </form>
             </FallInPlace>
@@ -162,16 +190,32 @@ const HeroSection: React.FC = ({ context }) => {
             opacity="1"
           >
             <FallInPlace delay={1}>
-              <Box overflow="hidden" height="100%">
-                <Image
-                  src="/static/images/HERO_IMG.png"
-                  layout="fixed"
-                  width={1200}
-                  height={762}
-                  alt="Screenshot of a ListPage in Saas UI Pro"
-                  quality="100"
-                  priority
-                />
+              <Box overflow="hidden" height="100%" style={{ position: "relative" }}>
+                <FallInPlace>
+                  <Image
+                    src="/static/images/HERO_IMG.png"
+                    width={680}
+                    height={480}
+                    style={{ margin: "0 auto", opacity: isLoading ? 0 : 1 }}
+                    alt="Screenshot of a ListPage in Saas UI Pro"
+                    quality="100"
+                    priority
+                  />
+                </FallInPlace>
+                {!isLoading && (
+                  <><Lottie
+                    options={{ ...lottieDefaultOptions, animationData: happyNouns }}
+                    height={'130px'}
+                    width={'130px'}
+                    zIndex={0}
+                    style={{ position: 'absolute', top: 20, right: 10, padding: 20, transform: 'rotateZ(13deg) rotateY(165deg)' }} /><Lottie
+                      options={{ ...lottieDefaultOptions, animationData: sadNouns }}
+                      height={'130px'}
+                      width={'130px'}
+                      zIndex={0}
+                      style={{ position: 'absolute', top: 20, left: 10, padding: 20, transform: 'rotateZ(-13deg)' }} /></>
+                  )}
+                {!isLoading ? null : <FallInPlace><div style={{width: '80vw', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -60%)'}}><Lottie options={{ ...lottieDefaultOptions, animationData: loading }} height={400} width={900}> </Lottie></div></FallInPlace>}
               </Box>
             </FallInPlace>
           </Box>
