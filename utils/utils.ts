@@ -31,7 +31,6 @@ function extractAndParseJSON(input) {
   if (jsonMatch && jsonMatch[1]) {
       try {
           const jsonData = JSON.parse(jsonMatch[1]);
-          console.log("Extracted JSON Data:", jsonData);
           return jsonData;
       } catch (e) {
           console.error("Failed to parse JSON:", e);
@@ -75,7 +74,6 @@ function getSummarizedTranscript(transcript) {
     return response.json();
   })
   .then(data => {
-    console.log(data);
     data = extractAndParseJSON(data.summarizedTranscript);
     return data;
   })

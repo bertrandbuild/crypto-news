@@ -4,105 +4,84 @@ import Image from "next/image";
 
 import {
   Box,
-  ButtonGroup,
   Container,
   FormControl,
-  FormHelperText,
-  FormLabel,
-  HStack,
-  Icon,
+  Heading,
   Input,
   Stack,
 } from "@chakra-ui/react";
-import { Br } from "@saas-ui/react";
-import { ButtonLink } from "components/button-link";
-import { BackgroundGradient } from "components/gradients/background-gradient";
 import { Hero } from "components/hero";
-import { NextjsLogo, ChakraLogo } from "components/logos";
 import { FallInPlace } from "components/motion/fall-in-place";
-import { Em } from "components/typography";
-import { FiArrowRight } from "react-icons/fi";
+import { extractVideoId, getSummarizedTranscript, getTranscript } from "utils/utils";
+import { useState } from "react";
+import { Loading } from "@saas-ui/react";
+import { fontSizes } from "theme/foundations/typography";
+
+const aiInsights = {
+  "Market_News": [
+      "Bitcoin is down 3.94%",
+      "Bitcoin is in a bullish trend as long as it doesn't close a week below 58k",
+      "Bitcoin's scenario of pumping past 70k and not revisiting it did not materialize; instead, a more sideways scenario is present with Bitcoin stuck at around 69-70k",
+      "Discussion of historical patterns suggesting current market dynamics are not unusual",
+      "Reference to major dumps and recoveries, highlighting the volatile nature of the market",
+  ],
+  "Technical_Analysis": [
+      "Bullish as long as Bitcoin stays above 58k",
+      "Bitcoin is currently stuck at around 69-70k, facing resistance at these levels",
+      "A flag formation target for Bitcoin was met, indicating a potential sideways movement for the week",
+      "Long term target for Bitcoin is around 90k based on doubling the price from the last base of 45k"
+  ],
+  "Fear_and_Greed_Indicator": 75
+}
 
 const Home: NextPage = () => {
+  const [content, setContent] = useState();
+  const [isLoading, setIsLoading] = useState();
+  const [isLoaded, setIsLoaded] = useState();
+
+  const context = {
+    setContent,
+    setIsLoading,
+    setIsLoaded,
+    content,
+    isLoading,
+    isLoaded
+  };
+
   return (
     <Box className="flex flex-col min-h-screen">
-      <HeroSection />
+      {isLoaded ? <VideoContent context={context} /> : <HeroSection context={context} />}
+      {isLoading ? <Loading /> : null}
     </Box>
   );
 };
 
-function extractVideoId(input) {
-  // Check if input is directly a video ID (assuming video IDs are 11 characters long and do not contain special URL characters)
-  if (
-    input.length === 11 &&
-    !input.includes("/") &&
-    !input.includes("?") &&
-    !input.includes("&")
-  ) {
-    return input;
-  }
-
-  // Attempt to handle the input as a URL
-  try {
-    const url = new URL(
-      input.startsWith("http://") || input.startsWith("https://")
-        ? input
-        : `https://${input}`
-    );
-    const urlParams = new URLSearchParams(url.search);
-    const videoId = urlParams.get("v");
-
+const HeroSection: React.FC = ({ context }) => {
+  const { setContent, setIsLoading, setIsLoaded } = context;
+  const handleSubmit = async (videoUrl) => {
+    setIsLoading(true);
+    const videoId = extractVideoId(videoUrl);
     if (videoId) {
-      return videoId;
-    }
-
-    // In some cases, the video ID might be part of the pathname for certain URL formats, e.g., "https://youtu.be/Dwb4u8my4vg"
-    const pathSegments = url.pathname.split("/").filter(Boolean); // Remove any empty strings due to leading or trailing slashes
-    if (pathSegments.length && pathSegments[0].length === 11) {
-      return pathSegments[0];
-    }
-  } catch (error) {
-    console.error("Error parsing input:", error);
-  }
-
-  return null; // Return null if the video ID couldn't be determined
-}
-
-function getTranscript(videoId) {
-  const endpoint = `http://localhost:3000/api/get_transcript?videoId=${videoId}`;
-  fetch(endpoint)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+      try {
+        // const transcript = await getTranscript(videoId);
+        // const transcriptCid = saveOnChain(transcript)
+        // const aiInsights = await getSummarizedTranscript(transcript)
+        console.log(aiInsights);
+        setContent(aiInsights);
+        // const insightCid = saveOnChain(aiInsights)
+        // const tx = saveToContract(videoId, transcriptCid, insightCid)
+        // console.log(tx);
+        window.setTimeout(() => {
+          setIsLoading(false);
+          setIsLoaded(true);
+        }, 100);
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
       }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error("There was a problem with your fetch operation:", error);
-    });
-}
-
-const handleSubmit = (videoUrl) => {
-  const videoId = extractVideoId(videoUrl);
-  if (videoId) {
-    try {
-      const transcript = getTranscript(videoId);
-      console.log(transcript);
-      // const transcriptCid = saveOnChain(transcript)
-      // const aiInsights = getAiInsights(transcript)
-      // const insightCid = saveOnChain(aiInsights)
-      // const tx = saveToContract(videoId, transcriptCid, insightCid)
-      // console.log(tx);
-    } catch (error) {
-      console.error(error);
     }
-  }
-};
+  };
 
-const HeroSection: React.FC = () => {
   return (
     <Box
       position="relative"
@@ -110,7 +89,7 @@ const HeroSection: React.FC = () => {
       backgroundImage={`url("static/images/SKY BG 2.png")`}
       backgroundSize="cover"
     >
-      <Container maxW="container.xl" pt={{ base: 40, lg: 10 }} pb="40">
+      <Container maxW="container.xl" pt={{ base: 40, lg: 10 }} pb="40" mt="50">
         <Stack direction={{ base: "column", lg: "column" }} alignItems="center">
           <Hero
             id="home"
@@ -141,7 +120,8 @@ const HeroSection: React.FC = () => {
                     height="70"
                     type="text"
                     name="videoUrl"
-                    placeholder='Paste url like : "https://youtube.com/watch?v=Dwb4u8my4vg" or just "Dwb4u8my4vg"'
+                    placeholder='Paste a youtube url'
+                    value={"https://www.youtube.com/watch?v=8FHWcNOZ95E"}
                   />
                   <img
                     src="\static\images\SEARCH NOUNS GLASSES.svg"
@@ -172,6 +152,72 @@ const HeroSection: React.FC = () => {
                   quality="100"
                   priority
                 />
+              </Box>
+            </FallInPlace>
+          </Box>
+        </Stack>
+      </Container>
+    </Box>
+  );
+};
+
+const VideoContent: React.FC = ({ context }) => {
+  const { content } = context;
+  console.log(content);
+
+  return (
+    <Box
+      position="relative"
+      overflow="hidden"
+      backgroundImage={`url("static/images/SKY BG 2.png")`}
+      backgroundSize="cover"
+    >
+      <Container maxW="container.xl" pt={{ base: 40, lg: 10 }} pb="40" mt="50">
+        <Stack direction={{ base: "row", lg: "row" }}>
+          <Box
+            height="600px"
+            display={{ base: "none", lg: "block" }}
+            left={{ lg: "60%", xl: "55%" }}
+            width="80vw"
+            height="auto"
+            maxW="1100px"
+            margin="0 auto"
+            opacity="1"
+          >
+            {content.Fear_and_Greed_Indicator && (
+              <FallInPlace delay={1}>
+              <Box>
+                <Heading size="md" mt={2}>Article Sentiment</Heading>
+                {content.Fear_and_Greed_Indicator}
+              </Box>
+            </FallInPlace>
+            )}
+          </Box>
+          <Box
+            height="600px"
+            display={{ base: "none", lg: "block" }}
+            left={{ lg: "60%", xl: "55%" }}
+            width="80vw"
+            height="auto"
+            maxW="1100px"
+            margin="0 auto"
+            opacity="1"
+          >
+            <FallInPlace delay={1}>
+              <Box>
+                <Heading size="xl">Summary</Heading>
+                <Heading size="md" mt={2}>Fundamental Analysis</Heading>
+                {content.Market_News.map((item, index) => (
+                  <li sx={undefined} key={index}>
+                    {item}
+                  </li>
+                ))}
+                <Heading size="md" mt={2}>Technical Analysis</Heading>
+                {content.Technical_Analysis.map((item, index) => (
+                  <li sx={undefined} key={index}>
+                    {item}
+                  </li>
+                ))}
               </Box>
             </FallInPlace>
           </Box>

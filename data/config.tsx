@@ -8,25 +8,13 @@ import { Logo } from './logo'
 const siteConfig = {
   logo: Logo,
   seo: {
-    title: 'Saas UI',
-    description: 'The React component library for startups',
+    title: 'Noun Watch',
+    description: 'Look for insight',
   } as NextSeoProps,
   termsUrl: '#',
   privacyUrl: '#',
   header: {
     links: [
-      {
-        id: 'features',
-        label: 'Features',
-      },
-      {
-        id: 'pricing',
-        label: 'Pricing',
-      },
-      {
-        id: 'faq',
-        label: 'FAQ',
-      },
       {
         label: 'Login',
         href: '/login',
@@ -42,20 +30,23 @@ const siteConfig = {
     copyright: (
       <>
         Built by{' '}
-        <Link href="https://twitter.com/Pagebakers">Eelco Wiersma</Link>
+        <Link href="https://twitter.com/bertrandbuild">Bertrand</Link>
+        <br></br>
+        Designed by{' '}
+        <Link href="https://stefanopomelli.com/">Stefano</Link>
       </>
     ),
     links: [
+      // {
+      //   href: 'mailto:hello@mail.dev',
+      //   label: 'Contact',
+      // },
       {
-        href: 'mailto:hello@saas-ui.dev',
-        label: 'Contact',
-      },
-      {
-        href: 'https://twitter.com/saas_js',
+        href: 'https://twitter.com/bertrandbuild',
         label: <FaTwitter size="14" />,
       },
       {
-        href: 'https://github.com/saas-js/saas-ui',
+        href: 'https://github.com/bertrandbuild/crypto-news',
         label: <FaGithub size="14" />,
       },
     ],
