@@ -20,6 +20,11 @@ const config: HardhatUserConfig = {
       url: "https://testnet.galadriel.com/",
       accounts: galadrielDevnet,
     },
+    'base-sepolia': {
+      url: 'https://sepolia.base.org',
+      accounts: [process.env.PRIVATE_KEY_CUSTOM as string],
+      gasPrice: 1000000000,
+    },
     hardhat: {
       chainId: 1337,
     },

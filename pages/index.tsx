@@ -135,7 +135,7 @@ const HeroSection: React.FC = ({ context }) => {
             px="0"
             title={isLoading?(<FallInPlace>Relax, we are watching this video for you</FallInPlace>):(<FallInPlace>Noun Watch, Look for insights</FallInPlace>)}
             description={
-              <FallInPlace delay={0.4} fontWeight="medium">
+              <FallInPlace delay={0.4} fontWeight="medium" color="black">
                 Turn you fav crypto influencers videos into on-chain provable
                 insights
               </FallInPlace>
