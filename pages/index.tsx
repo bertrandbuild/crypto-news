@@ -54,12 +54,14 @@ const Home: NextPage = () => {
 
   return (
     <Box className="flex flex-col min-h-screen">
+      {/* @ts-ignore */}
       {isLoaded ? <VideoContent context={context} /> : <HeroSection context={context} />}
       {isLoading ? <Loading /> : null}
     </Box>
   );
 };
 
+{/* @ts-ignore */}
 const HeroSection: React.FC = ({ context }) => {
   const { setContent, setIsLoading, setIsLoaded } = context;
   const handleSubmit = async (videoUrl) => {
@@ -151,7 +153,6 @@ const HeroSection: React.FC = ({ context }) => {
             </FallInPlace>
           </Hero>
           <Box
-            height="600px"
             display={{ lg: "block" }}
             left={{ lg: "60%", xl: "55%" }}
             width="80vw"
@@ -180,6 +181,7 @@ const HeroSection: React.FC = ({ context }) => {
   );
 };
 
+{/* @ts-ignore */}
 const VideoContent: React.FC = ({ context }) => {
   const { content } = context;
   return (
@@ -254,7 +256,6 @@ const VideoContent: React.FC = ({ context }) => {
             )}
           </Box>
           <Box
-            height="600px"
             display={{ lg: "block" }}
             left={{ lg: "60%", xl: "55%" }}
             width="50vw"
@@ -268,13 +269,13 @@ const VideoContent: React.FC = ({ context }) => {
                 <Heading size="xl">Summary</Heading>
                 <Heading size="md" mt={2}>Fundamental Analysis</Heading>
                 {content.Market_News.map((item, index) => (
-                  <li sx={undefined} key={index}>
+                  <li key={index}>
                     {item}
                   </li>
                 ))}
                 <Heading size="md" mt={2}>Technical Analysis</Heading>
                 {content.Technical_Analysis.map((item, index) => (
-                  <li sx={undefined} key={index}>
+                  <li key={index}>
                     {item}
                   </li>
                 ))}

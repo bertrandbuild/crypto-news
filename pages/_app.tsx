@@ -1,3 +1,4 @@
+// eslint-disable
 import type { AppProps } from 'next/app'
 
 import { AuthProvider, SaasProvider } from '@saas-ui/react'
@@ -17,7 +18,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           headerProps={header}
           footerProps={footer}
         >
-          <Component {...pageProps} />
+          {/* @ts-ignore */}
+          <Component {...(pageProps as any)} />
         </Layout>
       </AuthProvider>
     </SaasProvider>

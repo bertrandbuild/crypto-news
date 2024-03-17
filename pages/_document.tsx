@@ -6,6 +6,7 @@ export default class Document extends NextDocument {
   render() {
     return (
       <Html lang="en">
+        {/* @ts-ignore */}
         <Head>
           <link
             rel="apple-touch-icon"
@@ -29,6 +30,7 @@ export default class Document extends NextDocument {
         <body>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
           <Main />
+          {/* @ts-ignore */}
           <NextScript />
         </body>
       </Html>

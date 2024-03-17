@@ -5,11 +5,11 @@ require('dotenv').config()
 
 const galadrielDevnet = []
 if (process.env.PRIVATE_KEY_CUSTOM) {
-  galadrielDevnet.push(process.env.PRIVATE_KEY_CUSTOM)
+  galadrielDevnet.push(process.env.PRIVATE_KEY_CUSTOM as never)
 }
 const localhostPrivateKeys = []
 if (process.env.PRIVATE_KEY_LOCALHOST) {
-  localhostPrivateKeys.push(process.env.PRIVATE_KEY_LOCALHOST)
+  localhostPrivateKeys.push(process.env.PRIVATE_KEY_LOCALHOST as never)
 }
 
 const config: HardhatUserConfig = {

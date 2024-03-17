@@ -15,15 +15,11 @@ const siteConfig = {
   privacyUrl: '#',
   header: {
     links: [
-      // {
-      //   label: 'Login',
-      //   href: '/login',
-      // },
-      // {
-      //   label: 'Sign Up',
-      //   href: '/signup',
-      //   variant: 'primary',
-      // },
+      {
+        id: 'login',
+        label: 'Login',
+        href: '/login',
+      },
     ],
   },
   footer: {

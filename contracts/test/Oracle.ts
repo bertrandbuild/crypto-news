@@ -31,7 +31,7 @@ describe("Gpt", function () {
 
       await expect(
         oracle.connect(allSigners[1]).addAttestation(allSigners[1].address, "attestation")
-      ).to.be.rejectedWith("Caller is not owner");
+      ).to.be.revertedWith("Caller is not owner");
     });
   });
 });
