@@ -48,6 +48,7 @@ export const Header = (props: HeaderProps) => {
             onClick={(e) => {
               if (window.location.pathname === '/') {
                 e.preventDefault()
+                window.location.reload();
 
                 window.scrollTo({
                   top: 0,

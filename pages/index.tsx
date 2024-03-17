@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import * as React from "react";
 import type { NextPage } from "next";
 import Image from "next/image";
@@ -8,6 +9,7 @@ import {
   FormControl,
   Heading,
   Input,
+  Text,
   Stack,
 } from "@chakra-ui/react";
 import { Hero } from "components/hero";
@@ -17,6 +19,7 @@ import { useState } from "react";
 import { Loading } from "@saas-ui/react";
 import { fontSizes } from "theme/foundations/typography";
 import { getFileUrl, uploadText } from "utils/filecoin";
+import Link from "next/link";
 
 const aiInsights = {
   "Market_News": [
@@ -32,7 +35,7 @@ const aiInsights = {
       "A flag formation target for Bitcoin was met, indicating a potential sideways movement for the week",
       "Long term target for Bitcoin is around 90k based on doubling the price from the last base of 45k"
   ],
-  "Fear_and_Greed_Indicator": 75
+  "Fear_and_Greed_Indicator": 85
 }
 
 const Home: NextPage = () => {
@@ -64,15 +67,26 @@ const HeroSection: React.FC = ({ context }) => {
     const videoId = extractVideoId(videoUrl);
     if (videoId) {
       try {
-        // const transcript = await getTranscript(videoId);
-        // const transcriptCid = saveOnChain(transcript)
-        // const aiInsights = await getSummarizedTranscript(transcript)
-        console.log(aiInsights);
+        const isDev = false;
+        if (isDev){
+          setContent(aiInsights);
+        } else {
+          const transcript = await getTranscript(videoId);
+          const aiInsights = await getSummarizedTranscript(transcript)
+          const transcriptCid = await uploadText(JSON.stringify(transcript));
+          const aiInsightsCid = await uploadText(JSON.stringify(aiInsights));
+          window.setTimeout(() => {
+            const content = {
+              ...aiInsights,
+              analyzisFileUrl: getFileUrl(aiInsightsCid?.data.Hash),
+              transcriptFileUrl: getFileUrl(transcriptCid?.data.Hash)
+            }
+            setContent(content);
+          }, 100)
+        }
+
         setContent(aiInsights);
-        const aiInsightsCid = await uploadText(JSON.stringify(aiInsights));
-        const fileUrl = getFileUrl(aiInsightsCid.data.Hash);
-        console.log(fileUrl);
-        // const insightCid = saveOnChain(aiInsights)
+        // TODO
         // const tx = saveToContract(videoId, transcriptCid, insightCid)
         // console.log(tx);
         window.setTimeout(() => {
@@ -93,7 +107,7 @@ const HeroSection: React.FC = ({ context }) => {
       backgroundImage={`url("static/images/SKY_BG_2.png")`}
       backgroundSize="cover"
     >
-      <Container maxW="container.xl" pt={{ base: 40, lg: 10 }} pb="40" mt="50">
+      <Container maxW="container.xl" pt={{ base: 10, lg: 20 }} pb="40">
         <Stack direction={{ base: "column", lg: "column" }} alignItems="center">
           <Hero
             id="home"
@@ -117,7 +131,7 @@ const HeroSection: React.FC = ({ context }) => {
                   handleSubmit(url);
                 }}
               >
-                <FormControl mt="10">
+                <FormControl mt="10" style={{ position: "relative" }}>
                   <Input
                     border="solid 3px #000"
                     backgroundColor="rgba(255, 255, 255, 0.8)"
@@ -125,9 +139,10 @@ const HeroSection: React.FC = ({ context }) => {
                     type="text"
                     name="videoUrl"
                     placeholder='Paste a youtube url'
-                    value={"https://www.youtube.com/watch?v=8FHWcNOZ95E"}
+                    // value={"https://www.youtube.com/watch?v=8FHWcNOZ95E"}
                   />
                   <img
+                    style={{ position: "absolute", right: "20px", top: "22px", transform: "rotateY(175deg)" }}
                     src="\static\images\SEARCH_NOUNS_GLASSES.svg"
                     alt="Icon"
                   />
@@ -137,7 +152,7 @@ const HeroSection: React.FC = ({ context }) => {
           </Hero>
           <Box
             height="600px"
-            display={{ base: "none", lg: "block" }}
+            display={{ lg: "block" }}
             left={{ lg: "60%", xl: "55%" }}
             width="80vw"
             height="auto"
@@ -167,8 +182,6 @@ const HeroSection: React.FC = ({ context }) => {
 
 const VideoContent: React.FC = ({ context }) => {
   const { content } = context;
-  console.log(content);
-
   return (
     <Box
       position="relative"
@@ -176,35 +189,78 @@ const VideoContent: React.FC = ({ context }) => {
       backgroundImage={`url("static/images/SKY_BG_2.png")`}
       backgroundSize="cover"
     >
-      <Container maxW="container.xl" pt={{ base: 40, lg: 10 }} pb="40" mt="50">
-        <Stack direction={{ base: "row", lg: "row" }}>
+      <Container maxW="container.xl" pt={{ base: 40, lg: 10 }} pb="40" mt="70">
+        <Stack direction={{ base: "column", md: "row" }}>
           <Box
-            height="600px"
-            display={{ base: "none", lg: "block" }}
+            display={{ lg: "block" }}
             left={{ lg: "60%", xl: "55%" }}
-            width="80vw"
+            width="45vw"
             height="auto"
             maxW="1100px"
             margin="0 auto"
             opacity="1"
           >
             {content.Fear_and_Greed_Indicator && (
-              <FallInPlace delay={1}>
+              <FallInPlace delay={0}>
               <Box>
-                <Heading size="md" mt={2}>Article Sentiment</Heading>
-                {content.Fear_and_Greed_Indicator}
+                <Heading size="xl" mt={2}>Video Sentiment</Heading>
+                <div style={{display: 'flex', width: '100%', justifyContent: 'space-between', padding: '20px', position: 'relative'}}>
+                  <div style={{width: '100%', height: '30px', background: '#d30606'}}></div>
+                  <div style={{width: '100%', height: '30px', background: '#ea6d38'}}></div>
+                  <div style={{width: '100%', height: '30px', background: '#ebbc53'}}></div>
+                  <div style={{width: '100%', height: '30px', background: '#97d434'}}></div>
+                  <div style={{width: '100%', height: '30px', background: '#00d83c'}}></div>
+                  <div style={{width: '37px', height: '37px', border: "5px solid gray", position: 'absolute', background: 'white', top: '17px', left: `calc(${content.Fear_and_Greed_Indicator}% - 37px)`}}>
+                    <div style={{width: '15px', height: '27px', background: '#1b1b1b', position: 'absolute', top: '0', left: '12px'}}></div>
+                  </div>
+                </div>
+                {(content.Fear_and_Greed_Indicator < 20) && (
+                  <img
+                    src="\static\images\SUPER_BEARISH_NOUNS.svg"
+                    alt="Icon"
+                    style={{width: '80%', margin: '0 auto' }}
+                  />
+                )}
+                {(content.Fear_and_Greed_Indicator >= 20 && content.Fear_and_Greed_Indicator < 40) && (
+                  <img
+                    src="\static\images\BEARISH_NOUNS.svg"
+                    alt="Icon"
+                    style={{width: '80%', margin: '0 auto' }}
+                  />
+                )}
+                {(content.Fear_and_Greed_Indicator >= 40 && content.Fear_and_Greed_Indicator < 60) && (
+                  <img
+                    src="\static\images\NEUTRAL_NOUNS.svg"
+                    alt="Icon"
+                    style={{width: '80%', margin: '0 auto' }}
+                  />
+                )}
+                {(content.Fear_and_Greed_Indicator >= 60 && content.Fear_and_Greed_Indicator < 80) && (
+                  <img
+                    src="\static\images\BULLISH_NOUNS.svg"
+                    alt="Icon"
+                    style={{width: '80%', margin: '0 auto' }}
+                  />
+                )}
+                {(content.Fear_and_Greed_Indicator >= 80) && (
+                  <img
+                    src="\static\images\SUPER_BULLISH_NOUNS.svg"
+                    alt="Icon"
+                    style={{width: '80%', margin: '0 auto' }}
+                  />
+                )}
               </Box>
             </FallInPlace>
             )}
           </Box>
           <Box
             height="600px"
-            display={{ base: "none", lg: "block" }}
+            display={{ lg: "block" }}
             left={{ lg: "60%", xl: "55%" }}
-            width="80vw"
+            width="50vw"
             height="auto"
             maxW="1100px"
-            margin="0 auto"
+            margin="0 0 0 25px"
             opacity="1"
           >
             <FallInPlace delay={1}>
@@ -222,6 +278,14 @@ const VideoContent: React.FC = ({ context }) => {
                     {item}
                   </li>
                 ))}
+              </Box>
+              <Box style={{marginTop: '50px', width: '100%', display: 'flex', justifyContent: 'right'}}>
+                <Text>Verify the data : <Link style={{textDecoration: 'underline'}} target='_blank' href={`${content.transcriptFileUrl}`}>Transcript</Link> - <Link target='_blank' href={`${content.analyzisFileUrl}`} style={{textDecoration: 'underline'}}>Analyzis</Link></Text>
+                <img
+                    style={{ position: "relative", marginLeft: "20px", transform: "rotateY(175deg)" }}
+                    src="\static\images\SEARCH_NOUNS_GLASSES.svg"
+                    alt="Icon"
+                  />
               </Box>
             </FallInPlace>
           </Box>
