@@ -1,5 +1,7 @@
 import { Contract, TransactionReceipt } from "ethers";
 const { ethers } = require("hardhat");
+import fs from 'fs';
+import path from 'path';
 import {ABI} from "../contracts/abi";
 
 export interface GptQuery {
@@ -46,12 +48,30 @@ async function getCallbackFromGaladriel(
   return newInsights;
 }
 
+async function getFile(filePath: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+
 async function main() {
+  const fileName = process.env.FILENAME;
+  if (!fileName) {
+    console.error('Please provide a filename as an argument');
+    process.exit(1);
+  }
+    const filePath = path.join(process.cwd(), 'scripts', fileName);
+    const transcript = await getFile(filePath);
+
     const contractAddress = process.env.GPT_CONTRACT_ADDRESS;
     const [signer] = await ethers.getSigners();
     const contract = new ethers.Contract(contractAddress, ABI, signer);
-    // TODO: get real transcript
-    const transcript = `il défend not droit de fumer tout autant qu'il défend notre droit d'acheter Bitcoin c'est l'allégation du PDG de JP Morgan qui montre encore une fois sa détermination à ne pas être pro bitcoiner à ne pas aimer Bitcoin il le montre et même dans génér toutes les cryptonnaaies et pourtant c'est sa justification pour expliquer pourquoi JP Morgan son institution va de plus en plus vers la cryptoonnaie et la blockchain en tant que tel ce qui est intéressant de voir surtout c'est la différence entre le positionnement de JP Morgan et son CEO et son PDG et à côté le positionnement du CEO de Black Rock que l'on retrouve d'ailleurs dans les articles les plus lus juste en bas le Bitcoin est plus grand que n'importe quel gouvernement ça c'est le positionnement du CEO de Black Rock qui a lancé ses ETF justement BTC on va en parler tout à l'heure bonjour C'est cryptol j'espère que vous allez bien en ce 13 mars 2024 on se retrouve aujourd'hui pour forcément parler cryptoonné pour parler Bitcoin on va faire un tour sur l'actualité ensuite on va aller sur les graphiqu pour comprendre ce qui s'est passé hier et qu'on a eu un gros closur de liquidation on a une belle opportunité d'achat on va revenir sur toute cette partielà mais avant tout il était important de rappeler le positionnement de JP Morgan en gros on avance à reculon au niveau de Bitcoin alors c'est en tout cas l'image qu'il a l'image qui veut donner impérativement et pourtant quand on regarde ce qui se passe en réalité on sait très bien que JP Morgan avance très très rapidement sur la blockchain avance très rapidement sur la cryptoonnaie et on sait très bien qu'il y a eu énormément de manipulation avec les prises de parole et les prises de position de Jamie Diamond sur différents stocks mais aussi sur le Bitcoin on connaît très bien ça je vous ai déjà fait une vidéo samedi dessus à côté nous avons coin share qui quant à lui se dit qu'en effet les ETF sont quand même bien sympas et il est en train d'acheter la partie ETF du géant Valkyrie très important pour pouvoir s'étendre au US ça à savoir que la complexité de la création des ETF c'est pas tant la complexité technique c'est la complexité de réglementation rien de mieux que d'acheter la partie qui est déjà réglementée et qui est autorisée à pouvoir exécuter des ETF mais concrètement si on reprend et qu'on continue à parler de Bitcoin que représente le TF Valkyrie dedans si on regarde hop on va se déplacer ici on voit que c'est pas grand-chose he c'est à peu près 5000 6000 Bitcoin donc c'est vraiment très très faible par rapport à ce que l'on connaît Valkyrie c'est la petite ligne bleu foncé que vous voyez ici hein vraiment toute petite quand on compare en fait tout le reste et oui les ETF prennent de plus en plus de place on a dépassé les 10 milliards d'inflow donc de nouvelle liquidité qui achète du Bitcoin grâce aux ETF et on est à 58 milliards de capitalisation totale quand on regarde les journées de lundi et la journée d'hier c'est très intéressant de voir que on continue à être dans un flux positif 300 millions pour lundi 400 millions pour hier pour mardi très important de noter qu'on a toujours greskel qui est en train de liquider 285 millions et 539 MLI on c'est énorme et quand on regarde en fait la la vitesse à laquelle ça diminue on était sur un Black Rock pour rappel qui était à 600000 BTC qui se retrouve maintenant à 389000 et jusqu'à quand ils peuvent continuer à vendre combien de temps ça va prendre pour que en fait la pression baissière amenée par greskel s'arrête`;
 
     // The custom GPT prompt
     let prompt = `Title: YouTube Video Transcript.`;

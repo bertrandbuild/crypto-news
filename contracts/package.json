@@ -7,14 +7,14 @@
     "node": "npx hardhat node",
     "compile": "npx hardhat compile",
     "test": "npx hardhat test",
-    "chat": "npx hardhat run scripts/start.ts --network galadriel",
+    "gpt": "npx hardhat run scripts/start.ts --network galadriel",
+    "gpt-text": "FILENAME=input.txt npx hardhat run scripts/start.ts --network galadriel",
     "deployAll:localhost": "npx hardhat run scripts/deployAll.ts --network localhost",
     "deployAll:galadriel": "npx hardhat run scripts/deployAll.ts --network galadriel"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "ethers": "^6.11.0",
-    "hardhat": "^2.19.5",
+    "ethers": "^6.11.1",
     "hardhat-deploy": "^0.11.45",
     "hardhat-deploy-ethers": "^0.4.1"
   },
