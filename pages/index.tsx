@@ -16,6 +16,7 @@ import { extractVideoId, getSummarizedTranscript, getTranscript } from "utils/ut
 import { useState } from "react";
 import { Loading } from "@saas-ui/react";
 import { fontSizes } from "theme/foundations/typography";
+import { getFileUrl, uploadText } from "utils/filecoin";
 
 const aiInsights = {
   "Market_News": [
@@ -68,6 +69,9 @@ const HeroSection: React.FC = ({ context }) => {
         // const aiInsights = await getSummarizedTranscript(transcript)
         console.log(aiInsights);
         setContent(aiInsights);
+        const aiInsightsCid = await uploadText(JSON.stringify(aiInsights));
+        const fileUrl = getFileUrl(aiInsightsCid.data.Hash);
+        console.log(fileUrl);
         // const insightCid = saveOnChain(aiInsights)
         // const tx = saveToContract(videoId, transcriptCid, insightCid)
         // console.log(tx);
