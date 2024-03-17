@@ -90,7 +90,7 @@ const HeroSection: React.FC = ({ context }) => {
     <Box
       position="relative"
       overflow="hidden"
-      backgroundImage={`url("static/images/SKY BG 2.png")`}
+      backgroundImage={`url("static/images/SKY_BG_2.png")`}
       backgroundSize="cover"
     >
       <Container maxW="container.xl" pt={{ base: 40, lg: 10 }} pb="40" mt="50">
@@ -128,7 +128,7 @@ const HeroSection: React.FC = ({ context }) => {
                     value={"https://www.youtube.com/watch?v=8FHWcNOZ95E"}
                   />
                   <img
-                    src="\static\images\SEARCH NOUNS GLASSES.svg"
+                    src="\static\images\SEARCH_NOUNS_GLASSES.svg"
                     alt="Icon"
                   />
                 </FormControl>
@@ -148,7 +148,7 @@ const HeroSection: React.FC = ({ context }) => {
             <FallInPlace delay={1}>
               <Box overflow="hidden" height="100%">
                 <Image
-                  src="/static/images/HERO IMG.png"
+                  src="/static/images/HERO_IMG.png"
                   layout="fixed"
                   width={1200}
                   height={762}
@@ -173,7 +173,7 @@ const VideoContent: React.FC = ({ context }) => {
     <Box
       position="relative"
       overflow="hidden"
-      backgroundImage={`url("static/images/SKY BG 2.png")`}
+      backgroundImage={`url("static/images/SKY_BG_2.png")`}
       backgroundSize="cover"
     >
       <Container maxW="container.xl" pt={{ base: 40, lg: 10 }} pb="40" mt="50">
