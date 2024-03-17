@@ -75,8 +75,7 @@ contract Gpt {
 
     function onOracleLlmResponse(
         uint runId,
-        string memory response,
-        string memory errorMessage
+        string memory response
     ) public onlyOracle {
         ChatRun storage run = chatRuns[runId];
         require(

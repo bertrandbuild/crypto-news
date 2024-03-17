@@ -3,6 +3,7 @@ const { ethers } = require("hardhat");
 import fs from 'fs';
 import path from 'path';
 import {ABI} from "../contracts/abi";
+import { GptRole } from "./start";
 
 export interface GptQuery {
   content: string
