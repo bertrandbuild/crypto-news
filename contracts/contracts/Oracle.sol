@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.21;
 
 // Uncomment this line to use console.log
 // import "hardhat/console.sol";
@@ -17,18 +17,12 @@ interface IGpt {
         string memory errorMessage
     ) external;
 
-    function getMessageHistoryContents(
-        uint callbackId
-    ) external view returns (string[] memory);
+    function getMessageHistoryContents(uint callbackId) external view returns (string[] memory);
 
-    function getMessageHistoryRoles(
-        uint callbackId
-    ) external view returns (string[] memory);
-
+    function getMessageHistoryRoles(uint callbackId) external view returns (string[] memory);
 }
 
 contract Oracle {
-
     mapping(address => bool) whitelistedAddresses;
 
     mapping(address => string) public attestations;
@@ -46,14 +40,9 @@ contract Oracle {
     mapping(uint => bool) public isFunctionProcessed;
     uint public functionsCount;
 
-
     address private owner;
 
-    event PromptAdded(
-        uint indexed promptId,
-        uint indexed promptCallbackId,
-        address sender
-    );
+    event PromptAdded(uint indexed promptId, uint indexed promptCallbackId, address sender);
 
     event FunctionAdded(
         uint indexed functionId,
@@ -122,10 +111,7 @@ contract Oracle {
         return IGpt(callbackAddresses[promptId]).getMessageHistoryContents(promptCallBackId);
     }
 
-    function getRoles(
-        uint promptId,
-        uint promptCallBackId
-    ) public view returns (string[] memory) {
+    function getRoles(uint promptId, uint promptCallBackId) public view returns (string[] memory) {
         return IGpt(callbackAddresses[promptId]).getMessageHistoryRoles(promptCallBackId);
     }
 
