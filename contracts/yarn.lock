@@ -466,25 +466,25 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nomicfoundation/edr-darwin-arm64@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.npmjs.org/@nomicfoundation/edr-darwin-arm64/-/edr-darwin-arm64-0.2.1.tgz"
-  integrity sha512-aMYaRaZVQ/TmyNJIoXf1bU4k0zfinaL9Sy1day4yGlL6eiQPFfRGj9W6TZaZIoYG0XTx/mQWD7dkXJ7LdrleJA==
+"@nomicfoundation/edr-darwin-arm64@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.npmjs.org/@nomicfoundation/edr-darwin-arm64/-/edr-darwin-arm64-0.3.2.tgz"
+  integrity sha512-l6wfSBUUbGJiCENT6272CDI8yoMuf0sZH56H5qz3HnAyVzenkOvmzyF6/lar54m986kdAQqWls4cLvDxiOuLxg==
 
-"@nomicfoundation/edr@^0.2.0":
-  version "0.2.1"
-  resolved "https://registry.npmjs.org/@nomicfoundation/edr/-/edr-0.2.1.tgz"
-  integrity sha512-Dleau3ItHJh2n85G2J6AIPBoLgu/mOWkmrh26z3VsJE2tp/e00hUk/dqz85ncsVcBYEc6/YOn/DomWu0wSF9tQ==
+"@nomicfoundation/edr@^0.3.1":
+  version "0.3.2"
+  resolved "https://registry.npmjs.org/@nomicfoundation/edr/-/edr-0.3.2.tgz"
+  integrity sha512-HGWtjibAK1mo4I2A7nJ/fXqe/J9G54OrSPJnnkY2K8TiXotYLShGd9GvHkae3PuFjTJKm6ZgBy7tveJj5yrCfw==
   optionalDependencies:
-    "@nomicfoundation/edr-darwin-arm64" "0.2.1"
-    "@nomicfoundation/edr-darwin-x64" "0.2.1"
-    "@nomicfoundation/edr-linux-arm64-gnu" "0.2.1"
-    "@nomicfoundation/edr-linux-arm64-musl" "0.2.1"
-    "@nomicfoundation/edr-linux-x64-gnu" "0.2.1"
-    "@nomicfoundation/edr-linux-x64-musl" "0.2.1"
-    "@nomicfoundation/edr-win32-arm64-msvc" "0.2.1"
-    "@nomicfoundation/edr-win32-ia32-msvc" "0.2.1"
-    "@nomicfoundation/edr-win32-x64-msvc" "0.2.1"
+    "@nomicfoundation/edr-darwin-arm64" "0.3.2"
+    "@nomicfoundation/edr-darwin-x64" "0.3.2"
+    "@nomicfoundation/edr-linux-arm64-gnu" "0.3.2"
+    "@nomicfoundation/edr-linux-arm64-musl" "0.3.2"
+    "@nomicfoundation/edr-linux-x64-gnu" "0.3.2"
+    "@nomicfoundation/edr-linux-x64-musl" "0.3.2"
+    "@nomicfoundation/edr-win32-arm64-msvc" "0.3.2"
+    "@nomicfoundation/edr-win32-ia32-msvc" "0.3.2"
+    "@nomicfoundation/edr-win32-x64-msvc" "0.3.2"
 
 "@nomicfoundation/ethereumjs-common@4.0.4":
   version "4.0.4"
@@ -2250,14 +2250,14 @@ hardhat-gas-reporter@^1.0.8:
     eth-gas-reporter "^0.2.25"
     sha1 "^1.1.1"
 
-hardhat@^2.0.0, hardhat@^2.0.2, hardhat@^2.0.4, hardhat@^2.11.0, hardhat@^2.16.0, hardhat@^2.9.4, hardhat@^2.9.5, hardhat@^2.9.9:
-  version "2.21.0"
-  resolved "https://registry.npmjs.org/hardhat/-/hardhat-2.21.0.tgz"
-  integrity sha512-8DlJAVJDEVHaV1sh9FLuKLLgCFv9EAJ+M+8IbjSIPgoeNo3ss5L1HgGBMfnI88c7OzMEZkdcuyGoobFeK3Orqw==
+hardhat@^2.0.0, hardhat@^2.0.2, hardhat@^2.0.4, hardhat@^2.11.0, hardhat@^2.16.0, hardhat@^2.22.2, hardhat@^2.9.4, hardhat@^2.9.5, hardhat@^2.9.9:
+  version "2.22.2"
+  resolved "https://registry.npmjs.org/hardhat/-/hardhat-2.22.2.tgz"
+  integrity sha512-0xZ7MdCZ5sJem4MrvpQWLR3R3zGDoHw5lsR+pBFimqwagimIOn3bWuZv69KA+veXClwI1s/zpqgwPwiFrd4Dxw==
   dependencies:
     "@ethersproject/abi" "^5.1.2"
     "@metamask/eth-sig-util" "^4.0.0"
-    "@nomicfoundation/edr" "^0.2.0"
+    "@nomicfoundation/edr" "^0.3.1"
     "@nomicfoundation/ethereumjs-common" "4.0.4"
     "@nomicfoundation/ethereumjs-tx" "5.0.4"
     "@nomicfoundation/ethereumjs-util" "9.0.4"
