@@ -30,7 +30,16 @@ Feel free to submit any feature requests. If you use this template please share 
 
 ## Getting Started
 
+Requirements:
+Node JS > 18.x
+Python 3.x with pip
+
 First, clone this repo and run `pnpm i`
+
+Install python dependencies:
+```
+pip install youtube_transcript_api
+``` 
 
 To start the app run:
 
