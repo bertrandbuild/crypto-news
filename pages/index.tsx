@@ -159,7 +159,7 @@ const HeroSection: React.FC = ({ context }) => {
                     name="videoUrl"
                     placeholder='Paste a youtube url'
                     disabled={isLoading}
-                    // value={"https://www.youtube.com/watch?v=8FHWcNOZ95E"}
+                    //value={"https://www.youtube.com/watch?v=8FHWcNOZ95E"}
                   />
                   {isLoading ? (
                     <Lottie 
