@@ -3,8 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getYtTranscript } from '../../utils/callApi'; // Update the path as needed
 import * as testTranscript from './data.json';
 
-function cleanupTranscript(jsonString) {
-  const transcript = jsonString.transcript;
+function cleanupTranscript(transcript) {
   // Use a regular expression to remove the "Time: [timestamp] - Text: " part from each line
   const cleanedTranscript = transcript.replace(/Time: \d+\.\d+ - Text: /g, '').replace(/\n/g, ' ');
   return cleanedTranscript;
@@ -20,9 +19,10 @@ export default async function handler(
       return res.status(400).json({ error: 'Video ID is required' });
     }
 
-    const isDev = process.env.NODE_ENV === 'development';
+    // const isDev = process.env.NODE_ENV === 'development';
+    const isDev = false;
     try {
-      const transcript = (isDev) ? testTranscript : await getYtTranscript(videoId);
+      const transcript = (isDev) ? testTranscript.transcript : await getYtTranscript(videoId);
       const cleanedTranscript = cleanupTranscript(transcript);
       res.status(200).json(cleanedTranscript);
     } catch (error) {
