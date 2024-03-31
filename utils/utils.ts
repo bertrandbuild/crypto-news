@@ -41,7 +41,7 @@ function extractAndParseJSON(input) {
 }
 
 function getTranscript(videoId) {
-  const endpoint = `http://localhost:3000/api/get_transcript?videoId=${videoId}`;
+  const endpoint = `https://3k1x93u5kg.execute-api.eu-west-1.amazonaws.com/api/get_transcript?videoId=${videoId}`;
   return fetch(endpoint)
     .then(response => {
       if (!response.ok) {
