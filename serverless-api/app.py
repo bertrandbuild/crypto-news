@@ -1,15 +1,25 @@
 from chalice import Chalice
+from chalice import CORSConfig
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 
 app = Chalice(app_name='serverless-api')
 
+# TODO: update with prod url + isdev condition
+cors_config = CORSConfig(
+    allow_origin='http://localhost:3000',
+    allow_headers=['X-Special-Header'],
+    max_age=600,
+    allow_credentials=True
+)
 
-@app.route('/')
+
+@app.route('/', cors=cors_config)
 def index():
     return {'hello': 'world'}
 
-@app.route('/get_transcript')
+
+@app.route('/get_transcript', cors=cors_config)
 def get_transcript():
     video_id = app.current_request.query_params.get('videoId')
     if video_id:

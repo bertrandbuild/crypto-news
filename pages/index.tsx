@@ -90,6 +90,7 @@ const HeroSection: React.FC = ({ context }) => {
           },4000)
         } else {
           const transcript = await getTranscript(videoId);
+          transcript = transcript.slice(0, 11000); // TODO: handle longer transcripts
           const aiInsights = await getSummarizedTranscript(transcript)
           const transcriptCid = await uploadText(JSON.stringify(transcript));
           const aiInsightsCid = await uploadText(JSON.stringify(aiInsights));
