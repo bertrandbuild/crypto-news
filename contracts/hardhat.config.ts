@@ -3,11 +3,11 @@ import "@nomicfoundation/hardhat-toolbox";
 
 require('dotenv').config()
 
-const galadrielDevnet = []
+const galadrielDevnet: never[] = []
 if (process.env.PRIVATE_KEY_CUSTOM) {
   galadrielDevnet.push(process.env.PRIVATE_KEY_CUSTOM as never)
 }
-const localhostPrivateKeys = []
+const localhostPrivateKeys: never[] = []
 if (process.env.PRIVATE_KEY_LOCALHOST) {
   localhostPrivateKeys.push(process.env.PRIVATE_KEY_LOCALHOST as never)
 }

@@ -91,7 +91,7 @@ async function main() {
     Consider the following factors: The urgency and tone in discussions of market news and events.
     The optimism or caution expressed in technical analysis. Recommendations that suggest fear or greed in market psychology.`;
     prompt += `Output Format: Provide your analysis in bullet points, clearly categorized under "Market_News", "Technical_Analysis" and conclude with the "Fear_and_Greed_Indicator" score.`;
-    prompt += `Output Format: use a json format and reply with only the json.`;
+    prompt += `Output Format: use a json format, reply in the language of the transcript, with only the json.`;
     prompt += `Example Output: Market News: Discussed the recent Fed rate hike and its impact on tech stocks. Highlighted the earnings surprise from Company X, leading to a sharp stock price increase. Technical Analysis: Price target for Stock Y is set at $150, with current resistance at $145. Support for Currency Pair Z identified at 1.2500, with potential upside to 1.2650. Fear and Greed Indicator: 65 The score reflects moderate greed, influenced by optimistic price targets and positive market news coverage, balanced by cautionary advice on investment behavior.`;
     prompt += `Transcript: ${transcript}`;
 
