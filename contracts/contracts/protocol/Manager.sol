@@ -18,7 +18,7 @@ contract Manager is Users, Ownable {
         emit CreditsPriceUpdated(_creditsPrice);
     }
 
-    function fundUser(uint256 _newCredits) public {
+    function fundUser(uint256 _newCredits) public payable {
         uint256 calculatedValue = _calcValue(_newCredits);
         if (msg.value != calculatedValue) revert InvalidValue(msg.value, calculatedValue);
         _fundUser(_newCredits);
