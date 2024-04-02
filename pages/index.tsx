@@ -101,7 +101,7 @@ const HeroSection: React.FC = ({ context }) => {
           const aiInsightsCid = await uploadText(JSON.stringify(aiInsights));
           window.setTimeout(() => {
             const content = {
-              ...aiInsights,
+              // ...aiInsights, // TODO: add ai insights (only for dev)
               analyzisFileUrl: getFileUrl(aiInsightsCid?.data.Hash),
               transcriptFileUrl: getFileUrl(transcriptCid?.data.Hash)
             }
