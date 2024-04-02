@@ -43,11 +43,12 @@ function extractAndParseJSON(input) {
 function getTranscript(videoId) {
   const endpoint = `https://3k1x93u5kg.execute-api.eu-west-1.amazonaws.com/api/get_transcript?videoId=${videoId}`;
   return fetch(endpoint)
-    .then(response => {
+    .then(async response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      return response.json();
+      const text = await response.text();
+      return text;
     })
     .then(data => {
       return data;
