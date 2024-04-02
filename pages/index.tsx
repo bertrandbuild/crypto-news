@@ -81,7 +81,7 @@ const HeroSection: React.FC = ({ context }) => {
     const videoId = extractVideoId(videoUrl);
     if (videoId) {
       try {
-        const isDev = false;
+        const isDev = true;
         if (isDev){
           setIsLoading(true)
           window.setTimeout(() => {
@@ -91,8 +91,8 @@ const HeroSection: React.FC = ({ context }) => {
           },4000)
         } else {
           // FIXME: isdev
-          // let transcript = await getTranscript(videoId);
-          let transcript = `Bitcoin is down 3.94%`;
+          let transcript = await getTranscript(videoId);
+          // let transcript = `Bitcoin is down 3.94%`;
           transcript = transcript.slice(0, 11000); // TODO: handle longer transcripts
           console.log(transcript)
           const aiInsights = await getSummarizedTranscript(transcript)
