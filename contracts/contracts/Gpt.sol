@@ -1,17 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.21;
 
 // Uncomment this line to use console.log
 // import "hardhat/console.sol";
 
 interface IOracle {
-    function createLlmCall(
-        uint promptId
-    ) external returns (uint);
+    function createLlmCall(uint promptId) external returns (uint);
 }
 
 contract Gpt {
-
     struct Message {
         string role;
         string content;
@@ -73,13 +70,11 @@ contract Gpt {
         return currentId;
     }
 
-    function onOracleLlmResponse(
-        uint runId,
-        string memory response
-    ) public onlyOracle {
+    function onOracleLlmResponse(uint runId, string memory response) public onlyOracle {
         ChatRun storage run = chatRuns[runId];
         require(
-            keccak256(abi.encodePacked(run.messages[run.messagesCount - 1].role)) == keccak256(abi.encodePacked("user")),
+            keccak256(abi.encodePacked(run.messages[run.messagesCount - 1].role)) ==
+                keccak256(abi.encodePacked("user")),
             "No message to respond to"
         );
 
@@ -93,12 +88,11 @@ contract Gpt {
     function addMessage(string memory message, uint runId) public {
         ChatRun storage run = chatRuns[runId];
         require(
-            keccak256(abi.encodePacked(run.messages[run.messagesCount - 1].role)) == keccak256(abi.encodePacked("assistant")),
+            keccak256(abi.encodePacked(run.messages[run.messagesCount - 1].role)) ==
+                keccak256(abi.encodePacked("assistant")),
             "No response to previous message"
         );
-        require(
-            run.owner == msg.sender, "Only chat owner can add messages"
-        );
+        require(run.owner == msg.sender, "Only chat owner can add messages");
 
         Message memory newMessage;
         newMessage.content = message;

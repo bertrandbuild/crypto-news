@@ -1,4 +1,4 @@
-import {HardhatUserConfig} from "hardhat/config";
+import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 
 require('dotenv').config()
@@ -13,7 +13,15 @@ if (process.env.PRIVATE_KEY_LOCALHOST) {
 }
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.20",
+  solidity: {
+    version: '0.8.21',
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 800,
+      }, viaIR: true,
+    },
+  },
   networks: {
     galadriel: {
       chainId: 696969,
