@@ -5,9 +5,10 @@ import { ethers } from 'ethers';
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<any>
-) {
-    if (req.method === 'POST') {
-        try {
+    ) {
+        if (req.method === 'POST') {
+            // FIXME: right now this file is not working and the transaction is signed in the frontend (not good)
+            try {
             // In a real application, the private key should be securely fetched from an environment variable or secret management service
             const privateKey = process.env.PRIVATE_KEY;
             const provider = new ethers.providers.JsonRpcProvider(
