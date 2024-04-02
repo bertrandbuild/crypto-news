@@ -8,11 +8,8 @@
     "compile": "npx hardhat compile",
     "test": "npx hardhat test",
     "gpt": "npx hardhat run scripts/start.ts --network galadriel",
-    "fileStorage": "npx hardhat run scripts/startBase.ts --network base-sepolia",
     "gpt-text": "FILENAME=input.txt npx hardhat run scripts/start.ts --network galadriel",
-    "deployAll:localhost": "npx hardhat run scripts/deployAll.ts --network localhost",
-    "deployAll:galadriel": "npx hardhat run scripts/deployAll.ts --network galadriel",
-    "deployBase:sepolia": "npx hardhat run scripts/deployBase.ts --network base-sepolia"
+    "deployAll:galadriel": "npx hardhat run scripts/deployAll.ts --network galadriel"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
