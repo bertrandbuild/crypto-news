@@ -54,8 +54,8 @@ contract FilesManager {
      * @return retFileInfo The file information.
      * emits FileInfoAccessed event.
      */
-    function _getFile(uint256 _fileId) internal returns (FileInfo memory retFileInfo) {
-        retFileInfo = fileInfoMap[_fileId];
+    function _getFile(uint256 _fileId) internal view returns (FileInfo memory retFileInfo) {
+        retFileInfo = filesInfoMap[_fileId];
         if (retFileInfo.fileId == 0) revert FileDoesNotExist(_fileId);
     }
 }

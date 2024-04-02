@@ -53,7 +53,7 @@ contract Manager is Users, FilesManager, Ownable {
     }
 
     function getFile(uint256 _fileId) public returns (FileInfo memory) {
-        if (users[msg.sender] == 0) revert NotEnoughCredits(msg.sender);
+        if (credits[msg.sender] == 0) revert NotEnoughCredits(msg.sender);
         _useCredit(msg.sender);
         // todo think if other checks should be added before calling
         return _getFile(_fileId);
