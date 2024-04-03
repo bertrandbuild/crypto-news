@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.21;
+pragma solidity ^0.8.8;
 
 contract Users {
     // mapping fo user credits
@@ -23,7 +23,7 @@ contract Users {
      */
     function _useCredit(address _userId) internal {
         credits[_userId] -= 1;
-        CreditUsed(_userId); // event might not be needed (adding it to follow convention)
+        emit CreditUsed(_userId); // event might not be needed (adding it to follow convention)
     }
 
     /**
