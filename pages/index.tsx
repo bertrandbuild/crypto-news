@@ -14,7 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { Hero } from "components/hero";
 import { FallInPlace } from "components/motion/fall-in-place";
-import { extractVideoId, getSummarizedTranscript, getTranscript } from "utils/utils";
+import { extractVideoId, getTranscript } from "utils/utils";
+import { getSummarizedTranscript } from "utils/galadriel";
 import { useState } from "react";
 import { Loading } from "@saas-ui/react";
 import { getFileUrl, uploadText } from "utils/filecoin";
@@ -80,7 +81,7 @@ const HeroSection: React.FC = ({ context }) => {
     const videoId = extractVideoId(videoUrl);
     if (videoId) {
       try {
-        const isDev = false;
+        const isDev = true;
         if (isDev){
           setIsLoading(true)
           window.setTimeout(() => {
@@ -89,9 +90,13 @@ const HeroSection: React.FC = ({ context }) => {
             setIsLoaded(true);
           },4000)
         } else {
-          const transcript = await getTranscript(videoId);
+          // FIXME: isdev
+          let transcript = await getTranscript(videoId);
+          // let transcript = `Bitcoin is down 3.94%`;
           transcript = transcript.slice(0, 11000); // TODO: handle longer transcripts
+          console.log(transcript)
           const aiInsights = await getSummarizedTranscript(transcript)
+          console.log(aiInsights)
           const transcriptCid = await uploadText(JSON.stringify(transcript));
           const aiInsightsCid = await uploadText(JSON.stringify(aiInsights));
           window.setTimeout(() => {
