@@ -2,6 +2,7 @@
 pragma solidity ^0.8.8;
 
 
+
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {ERC721Holder} from "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import {TablelandDeployments} from "@tableland/evm/contracts/utils/TablelandDeployments.sol";
@@ -12,8 +13,8 @@ contract FilesManager is ERC721Holder{
     uint256 private _tableId; // Unique table ID
     string private constant _TABLE_PREFIX = "crypto_n_table"; // Custom table prefix
 
-    // Mapping to store the file info
-    mapping(uint256 => FileInfo) public filesInfoMap;
+    // Mapping to store FileInfo. Several files from one video.
+    mapping(uint256 => mapping(uint256 => FileInfo)) public filesInfoMap;
 
     struct FileInfo {
         uint256 fileId;
@@ -22,10 +23,11 @@ contract FilesManager is ERC721Holder{
     }
 
     // Event to emit when a file is added
-    event FileCreated(FileInfo file);
+    event FileCreated(uint256 id, FileInfo file);
 
     error ExistentFile(address fileOwner, uint256 fileId);
     error FileDoesNotExist(uint256 fileId);
+    error VideoNotExist(uint256 id);
 
 
     /**
@@ -37,24 +39,24 @@ contract FilesManager is ERC721Holder{
      * emits FileCreated event.
      */
     function _createFile(
-        uint256 _id, //id 
+        uint256 _id,
         uint256 _fileId,
         string memory _transcriptCid,
         string memory _analysisCid
     ) internal {
-        if (filesInfoMap[_fileId].fileId != 0) revert ExistentFile(msg.sender, _fileId);
+        if (filesInfoMap[_id][_fileId].fileId != 0) revert ExistentFile(msg.sender, _fileId);
 
         FileInfo memory _newFile = FileInfo({
             fileId: _fileId,
             transcriptCid: _transcriptCid,
             analysisCid: _analysisCid
         });
-        filesInfoMap[_fileId] = _newFile;
+        filesInfoMap[_id][_fileId] = _newFile;
 
-        //Store the info in TableLand
         this.insertIntoTable(_id, _fileId, _transcriptCid, _analysisCid);
 
-        emit FileCreated(_newFile);
+        emit FileCreated(_id, _newFile);
+        // todo add logic to store the info in TableLand
     }
 
     function createAnalysis(string calldata _transcript) internal {
@@ -68,12 +70,17 @@ contract FilesManager is ERC721Holder{
      * @return retFileInfo The file information.
      * emits FileInfoAccessed event.
      */
-    function _getFile(uint256 _fileId) internal view returns (FileInfo memory retFileInfo) {
-        retFileInfo = filesInfoMap[_fileId];
+    function _getFile(uint256 _id, uint256 _fileId) internal view returns (FileInfo memory retFileInfo) {
+        retFileInfo = filesInfoMap[_id][_fileId];
+        //if (filesInfoMap[_id] == 0) revert VideoNotExist(_id);
         if (retFileInfo.fileId == 0) revert FileDoesNotExist(_fileId);
     }
 
     /**
+    * @notice Creates a new table with predefined schema
+    * @dev The table schema includes an ID, file ID, and CIDs for transcript and analysis
+    */
+       /**
     * @notice Creates a new table with predefined schema
     * @dev The table schema includes an ID, file ID, and CIDs for transcript and analysis
     */
@@ -119,7 +126,7 @@ contract FilesManager is ERC721Holder{
         );
     }
 
-    
+
     /**
     * @notice Updates a specific row in the table
     * @param id The unique identifier for the row to update
@@ -136,7 +143,7 @@ contract FilesManager is ERC721Holder{
         );
 
 
-        
+
         string memory filters = string.concat(
             "id=",
             Strings.toString(id)
@@ -187,7 +194,7 @@ contract FilesManager is ERC721Holder{
         return _tableId;
     }
 
-    
+
     /**
     * @notice Returns the name of the table
     * @return The table name
@@ -195,5 +202,5 @@ contract FilesManager is ERC721Holder{
     function getTableName() external view returns (string memory) {
         return SQLHelpers.toNameFromId(_TABLE_PREFIX, _tableId);
     }
-    
+
 }

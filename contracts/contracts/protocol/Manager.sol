@@ -43,8 +43,8 @@ contract Manager is Users, FilesManager, Ownable {
     }
 
     function createFile(
-        uint256 _id,
-        uint256 _fileId,
+        uint256 _id, //video id
+        uint256 _fileId, //possibility several files from one video
         string memory _transcriptCid,
         string memory _analysisCid
     ) public {
@@ -54,11 +54,11 @@ contract Manager is Users, FilesManager, Ownable {
         // ! if credits should be decreased, should also check the user has credits
     }
 
-    function getFile(uint256 _fileId) public returns (FileInfo memory) {
+    function getFile(uint256 _id, uint256 _fileId) public returns (FileInfo memory) {
         if (credits[msg.sender] == 0) revert NotEnoughCredits(msg.sender);
         _useCredit(msg.sender);
         // todo think if other checks should be added before calling
-        return _getFile(_fileId);
+        return _getFile(_id, _fileId);
     }
 
     // helper
