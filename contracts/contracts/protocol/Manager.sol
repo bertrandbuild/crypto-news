@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.21;
+pragma solidity ^0.8.8;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -14,6 +14,7 @@ contract Manager is Users, FilesManager, Ownable {
     error InvalidNewCreditsPrice(uint256 newCreditsPrice);
     error InvalidValue(uint256 value, uint256 expectedValue);
     error NotEnoughCredits(address userId);
+
 
     // Constructor to set the initial creditsPrice
     constructor(uint256 _creditsPrice) Ownable(msg.sender) {
@@ -42,21 +43,22 @@ contract Manager is Users, FilesManager, Ownable {
     }
 
     function createFile(
-        uint256 _fileId,
+        uint256 _id, //video id
+        uint256 _fileId, //possibility several files from one video
         string memory _transcriptCid,
         string memory _analysisCid
     ) public {
         // todo think on checks that should be done before calling
-        _createFile(_fileId, _transcriptCid, _analysisCid);
+        _createFile(_id, _fileId, _transcriptCid, _analysisCid);
         // ! the credits should decrease (we are not returning file info)? in case they should are we sure that the msg.sender is the user?
         // ! if credits should be decreased, should also check the user has credits
     }
 
-    function getFile(uint256 _fileId) public returns (FileInfo memory) {
-        if (users[msg.sender] == 0) revert NotEnoughCredits(msg.sender);
+    function getFile(uint256 _id, uint256 _fileId) public returns (FileInfo memory) {
+        if (credits[msg.sender] == 0) revert NotEnoughCredits(msg.sender);
         _useCredit(msg.sender);
         // todo think if other checks should be added before calling
-        return _getFile(_fileId);
+        return _getFile(_id, _fileId);
     }
 
     // helper
